@@ -1,7 +1,32 @@
-import React from 'react'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 
-export default () => (
-  <div>
-    <h1>foo</h1>
-  </div>
-)
+import App from './App';
+
+export default App;
+
+if (typeof document !== 'undefined') {
+    const target = document.getElementById('root');
+
+    const renderMethod = target.hasChildNodes()
+        ? ReactDOM.hydrate
+        : ReactDOM.render;
+
+    function render(Comp) {
+        renderMethod(
+            <AppContainer>
+                <Comp />
+            </AppContainer>,
+            target
+        );
+    }
+
+    render(App);
+
+    if (module && module.hot) {
+        module.hot.accept('./App', () => {
+            render(App);
+        });
+    }
+}
